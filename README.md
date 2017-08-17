@@ -1,4 +1,4 @@
-# MNPasswordEditText
+# MNPasswordEditText [![](https://jitpack.io/v/maning0303/MNPasswordEditText.svg)](https://jitpack.io/#maning0303/MNPasswordEditText)
 类似微信支付宝的密码输入框
 
 
