@@ -11,6 +11,7 @@ import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -161,7 +162,13 @@ public class MNPasswordEditText extends EditText {
             drawable.setStroke((int) borderWidth, borderColor);
             drawable.setCornerRadius(borderRadius);
             drawable.setColor(backgroundColor);
-            setBackground(drawable);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                //Android系统大于等于API16，使用setBackground
+                setBackground(drawable);
+            } else {
+                //Android系统小于API16，使用setBackgroundDrawable
+                setBackgroundDrawable(drawable);
+            }
             float itemW = measuredWidth / maxLength;
             //画线
             for (int i = 1; i < maxLength; i++) {
