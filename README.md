@@ -22,7 +22,7 @@
 #### 2.在app目录下的build.gradle中添加依赖
 ``` gradle
 	dependencies {
-	     compile 'com.github.maning0303:MNPasswordEditText:V1.0.0'
+	     compile 'com.github.maning0303:MNPasswordEditText:V1.0.1'
 	}
 ```
 
