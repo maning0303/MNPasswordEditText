@@ -82,7 +82,7 @@ public class MNPasswordEditText extends EditText {
         //边框颜色
         borderColor = array.getColor(R.styleable.MNPasswordEditText_mnPsw_border_color, Color.parseColor("#FF0000"));
         //边框选中的颜色
-        borderSelectedColor = array.getColor(R.styleable.MNPasswordEditText_mnPsw_border_selected_color, Color.parseColor("#FF0000"));
+        borderSelectedColor = array.getColor(R.styleable.MNPasswordEditText_mnPsw_border_selected_color, 0);
         //文字的颜色
         textColor = array.getColor(R.styleable.MNPasswordEditText_mnPsw_text_color, Color.parseColor("#FF0000"));
         //边框圆角
@@ -189,32 +189,42 @@ public class MNPasswordEditText extends EditText {
             drawable.setCornerRadius(borderRadius);
             drawable.setColor(backgroundColor);
             Bitmap bitmap = drawableToBitmap(drawable, (int) itemW, (int) itemH);
-            drawable.setStroke((int) borderWidth, borderSelectedColor);
-            Bitmap bitmapSelected = drawableToBitmap(drawable, (int) itemW, (int) itemH);
+            Bitmap bitmapSelected = null;
+            if (borderSelectedColor != 0) {
+                drawable.setStroke((int) borderWidth, borderSelectedColor);
+                bitmapSelected = drawableToBitmap(drawable, (int) itemW, (int) itemH);
+            }
             //画每个Item背景
             for (int i = 0; i < maxLength; i++) {
                 float left = itemW * i + margin / 2 + margin * i;
                 float top = 0;
-                if (getText().length() == i) {
-                    //选中是另外的颜色
-                    canvas.drawBitmap(bitmapSelected, left, top, mPaintLine);
-                } else {
+                if (bitmapSelected == null) {
                     canvas.drawBitmap(bitmap, left, top, mPaintLine);
+                } else {
+                    if (getText().length() == i) {
+                        //选中是另外的颜色
+                        canvas.drawBitmap(bitmapSelected, left, top, mPaintLine);
+                    } else {
+                        canvas.drawBitmap(bitmap, left, top, mPaintLine);
+                    }
                 }
-
             }
         } else if (editTextStyle == 3) {
             float itemW = (measuredWidth - itemMargin * (maxLength - 1) - itemMargin) / maxLength;
             //下划线格式
             for (int i = 0; i < maxLength; i++) {
-                if (getText().length() == i) {
-                    //选中是另外的颜色
-                    mPaintLine.setColor(borderSelectedColor);
+                if (borderSelectedColor != 0) {
+                    if (getText().length() == i) {
+                        //选中是另外的颜色
+                        mPaintLine.setColor(borderSelectedColor);
+                    } else {
+                        mPaintLine.setColor(borderColor);
+                    }
                 } else {
                     mPaintLine.setColor(borderColor);
                 }
                 float startX = itemW * i + itemMargin * i + itemMargin / 2;
-                float startY = itemH;
+                float startY = itemH - borderWidth;
                 float stopX = startX + itemW;
                 float stopY = startY;
                 canvas.drawLine(startX, startY, stopX, stopY, mPaintLine);
