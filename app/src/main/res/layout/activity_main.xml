@@ -1,21 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#dadada"
-    android:orientation="vertical"
-    android:padding="10dp"
-    >
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/tvShow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="展现密码的地方"
-        />
+        android:text="展现密码的地方" />
 
 
     <com.maning.pswedittextlibrary.MNPasswordEditText
@@ -28,8 +24,22 @@
         android:maxLength="6"
         android:textSize="20sp"
         app:mnPsw_cover_circle_color="@color/colorPrimaryDark"
-        app:mnPsw_cover_circle_radius="12dp"
-        />
+        app:mnPsw_cover_circle_radius="12dp" />
+
+    <com.maning.pswedittextlibrary.MNPasswordEditText
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:focusableInTouchMode="true"
+        android:inputType="number"
+        android:maxLength="6"
+        android:textSize="20sp"
+        app:mnPsw_border_color="#7e7e7e"
+        app:mnPsw_border_width="4dp"
+        app:mnPsw_item_margin="10dp"
+        app:mnPsw_mode="OriginalText"
+        app:mnPsw_style="StyleUnderLine"
+        app:mnPsw_text_color="#393939" />
 
     <com.maning.pswedittextlibrary.MNPasswordEditText
         android:layout_width="match_parent"
@@ -46,8 +56,7 @@
         app:mnPsw_item_margin="15dp"
         app:mnPsw_mode="OriginalText"
         app:mnPsw_style="StyleOneself"
-        app:mnPsw_text_color="#FFFFFF"
-        />
+        app:mnPsw_text_color="#FFFFFF" />
 
     <com.maning.pswedittextlibrary.MNPasswordEditText
         android:layout_width="match_parent"
@@ -65,8 +74,7 @@
         app:mnPsw_item_margin="15dp"
         app:mnPsw_mode="Text"
         app:mnPsw_style="StyleOneself"
-        app:mnPsw_text_color="#2e2e2e"
-        />
+        app:mnPsw_text_color="#2e2e2e" />
 
     <com.maning.pswedittextlibrary.MNPasswordEditText
         android:layout_width="match_parent"
@@ -74,7 +82,7 @@
         android:layout_marginTop="10dp"
         android:focusableInTouchMode="true"
         android:inputType="number"
-        android:maxLength="6"
+        android:maxLength="4"
         android:textSize="20sp"
         app:mnPsw_background_color="#FFFFFF"
         app:mnPsw_border_color="#7e7e7e"
@@ -82,10 +90,10 @@
         app:mnPsw_border_width="2dp"
         app:mnPsw_cover_bitmap_id="@mipmap/ic_launcher"
         app:mnPsw_cover_bitmap_width="30dp"
-        app:mnPsw_item_margin="5dp"
+        app:mnPsw_item_margin="40dp"
         app:mnPsw_mode="Bitmap"
         app:mnPsw_style="StyleOneself"
-        app:mnPsw_text_color="#393939"
-        />
+        app:mnPsw_text_color="#393939" />
+
 
 </LinearLayout>
