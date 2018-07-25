@@ -21,38 +21,87 @@ import android.widget.EditText;
 import java.lang.reflect.Field;
 
 /**
- * Created by maning on 2017/8/16.
+ * @author : maning
+ * @desc :   验证码和密码的输入框
  */
-
 public class MNPasswordEditText extends EditText {
 
     private static final String TAG = "MNPasswordEditText";
 
     private Context mContext;
-    //长度
+    /**
+     * 长度
+     */
     private int maxLength;
-    //文字大小
-    private float textSize;
-    //文字的画笔
-    private Paint mPaintText;
-    //线的画笔
-    private Paint mPaintLine;
-    //背景色
-    private int backgroundColor;
-    private int borderColor;
-    private int borderSelectedColor;
+    /**
+     * 文字的颜色
+     */
     private int textColor;
+    /**
+     * 文字的画笔
+     */
+    private Paint mPaintText;
+    /**
+     * 线框的画笔
+     */
+    private Paint mPaintLine;
+    /**
+     * 背景色
+     */
+    private int backgroundColor;
+    /**
+     * 线框的颜色
+     */
+    private int borderColor;
+    /**
+     * 线框被选中的颜色
+     */
+    private int borderSelectedColor;
+    /**
+     * 线框的圆角
+     */
     private float borderRadius;
+    /**
+     * 线框的宽度
+     */
     private float borderWidth;
+    /**
+     * 密码框的间隔
+     */
     private float itemMargin;
+    /**
+     * 输入的类型
+     */
     private int inputMode;
+    /**
+     * 样式
+     */
     private int editTextStyle;
-    //文字遮盖
+    /**
+     * 文字遮盖
+     */
     private String coverText;
+    /**
+     * 图片遮盖
+     */
     private int coverBitmapID;
-    private int coverCirclrColor;
-    private float coverCirclrRadius;
+    /**
+     * 图片宽度
+     */
     private float coverBitmapWidth;
+    /**
+     * 圆形遮盖的颜色
+     */
+    private int coverCirclrColor;
+    /**
+     * 圆形遮盖的半径
+     */
+    private float coverCirclrRadius;
+    /**
+     * 线框背景
+     */
+    private GradientDrawable gradientDrawable = new GradientDrawable();
+    private Bitmap coverBitmap;
 
 
     public MNPasswordEditText(Context context) {
@@ -116,23 +165,6 @@ public class MNPasswordEditText extends EditText {
     private void init() {
         //最大的长度
         maxLength = getMaxLength();
-
-        //文字的大小
-        textSize = getTextSize();
-
-        //初始化画笔
-        //文字
-        mPaintText = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mPaintText.setStyle(Paint.Style.FILL);
-        mPaintText.setColor(textColor);
-        mPaintText.setTextSize(textSize);
-
-        //线
-        mPaintLine = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mPaintLine.setStyle(Paint.Style.STROKE);
-        mPaintLine.setColor(borderColor);
-        mPaintLine.setStrokeWidth(borderWidth);
-
         //隐藏光标
         setCursorVisible(false);
         //设置本来文字的颜色为透明
@@ -147,6 +179,29 @@ public class MNPasswordEditText extends EditText {
             }
         });
 
+        //初始化画笔
+        //文字
+        mPaintText = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaintText.setStyle(Paint.Style.FILL);
+        mPaintText.setColor(textColor);
+        mPaintText.setTextSize(getTextSize());
+
+        //线
+        mPaintLine = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaintLine.setStyle(Paint.Style.STROKE);
+        mPaintLine.setColor(borderColor);
+        mPaintLine.setStrokeWidth(borderWidth);
+
+        //遮盖是图片方式，提前加载图片
+        if (inputMode == 2) {
+            //判断有没有图片
+            if (coverBitmapID == -1) {
+                //抛出异常
+                throw new NullPointerException("遮盖图片为空");
+            } else {
+                coverBitmap = BitmapFactory.decodeResource(getContext().getResources(), coverBitmapID);
+            }
+        }
     }
 
 
@@ -160,17 +215,16 @@ public class MNPasswordEditText extends EditText {
 
         //判断类型
         if (editTextStyle == 1) {
-            //初始化背景框
-            GradientDrawable drawable = new GradientDrawable();
-            drawable.setStroke((int) borderWidth, borderColor);
-            drawable.setCornerRadius(borderRadius);
-            drawable.setColor(backgroundColor);
+            //连体框
+            gradientDrawable.setStroke((int) borderWidth, borderColor);
+            gradientDrawable.setCornerRadius(borderRadius);
+            gradientDrawable.setColor(backgroundColor);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 //Android系统大于等于API16，使用setBackground
-                setBackground(drawable);
+                setBackground(gradientDrawable);
             } else {
                 //Android系统小于API16，使用setBackgroundDrawable
-                setBackgroundDrawable(drawable);
+                setBackgroundDrawable(gradientDrawable);
             }
             float itemW = measuredWidth / maxLength;
             //画线
@@ -182,17 +236,17 @@ public class MNPasswordEditText extends EditText {
                 canvas.drawLine(startX, startY, stopX, stopY, mPaintLine);
             }
         } else if (editTextStyle == 2) {
+            //方形框
             float margin = itemMargin;
             float itemW = measuredWidth / maxLength - margin;
-            GradientDrawable drawable = new GradientDrawable();
-            drawable.setStroke((int) borderWidth, borderColor);
-            drawable.setCornerRadius(borderRadius);
-            drawable.setColor(backgroundColor);
-            Bitmap bitmap = drawableToBitmap(drawable, (int) itemW, (int) itemH);
+            gradientDrawable.setStroke((int) borderWidth, borderColor);
+            gradientDrawable.setCornerRadius(borderRadius);
+            gradientDrawable.setColor(backgroundColor);
+            Bitmap bitmap = drawableToBitmap(gradientDrawable, (int) itemW, (int) itemH);
             Bitmap bitmapSelected = null;
             if (borderSelectedColor != 0) {
-                drawable.setStroke((int) borderWidth, borderSelectedColor);
-                bitmapSelected = drawableToBitmap(drawable, (int) itemW, (int) itemH);
+                gradientDrawable.setStroke((int) borderWidth, borderSelectedColor);
+                bitmapSelected = drawableToBitmap(gradientDrawable, (int) itemW, (int) itemH);
             }
             //画每个Item背景
             for (int i = 0; i < maxLength; i++) {
@@ -253,23 +307,15 @@ public class MNPasswordEditText extends EditText {
                     }
                     float startX = (measuredWidth / maxLength - picW) / 2.0f + measuredWidth / maxLength * i;
                     float startY = (itemH - picW) / 2.0f;
-                    //判断有没有图片
-                    if (coverBitmapID == -1) {
-                        //抛出异常
-                        throw new NullPointerException("遮盖图片为空");
-                    } else {
-                        Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(), coverBitmapID);
-                        bitmap = Bitmap.createScaledBitmap(bitmap, (int) picW, (int) picW, true);
-                        canvas.drawBitmap(bitmap, startX, startY, mPaintText);
-                    }
+                    Bitmap bitmap = Bitmap.createScaledBitmap(coverBitmap, (int) picW, (int) picW, true);
+                    canvas.drawBitmap(bitmap, startX, startY, mPaintText);
                 } else if (inputMode == 3) {
-                    String StrPosition = coverText;
-                    float fontWidth = getFontWidth(mPaintText, StrPosition);
-                    float fontHeight = getFontHeight(mPaintText, StrPosition);
+                    float fontWidth = getFontWidth(mPaintText, coverText);
+                    float fontHeight = getFontHeight(mPaintText, coverText);
                     float startX = (measuredWidth / maxLength - fontWidth) / 2.0f + measuredWidth / maxLength * i;
                     float startY = (itemH + fontHeight) / 2.0f - 6;
                     mPaintText.setColor(textColor);
-                    canvas.drawText(StrPosition, startX, startY, mPaintText);
+                    canvas.drawText(coverText, startX, startY, mPaintText);
                 } else {
                     String StrPosition = String.valueOf(currentText.charAt(i));
                     float fontWidth = getFontWidth(mPaintText, StrPosition);
@@ -302,8 +348,12 @@ public class MNPasswordEditText extends EditText {
         super.onTextChanged(text, start, lengthBefore, lengthAfter);
         //刷新界面
         invalidate();
-        if (mOnPasswordChangeListener != null) {
-            mOnPasswordChangeListener.onPasswordChange(getText().toString());
+        if (onTextChangeListener != null) {
+            if (getText().toString().length() == getMaxLength()) {
+                onTextChangeListener.onTextChange(getText().toString(), true);
+            } else {
+                onTextChangeListener.onTextChange(getText().toString(), false);
+            }
         }
     }
 
@@ -346,14 +396,20 @@ public class MNPasswordEditText extends EditText {
         return (int) (dpValue * scale + 0.5f);
     }
 
-    private OnPasswordChangeListener mOnPasswordChangeListener;
+    private OnTextChangeListener onTextChangeListener;
 
-    public void setOnPasswordChangeListener(OnPasswordChangeListener onPasswordChangeListener) {
-        mOnPasswordChangeListener = onPasswordChangeListener;
+    public void setOnTextChangeListener(OnTextChangeListener onTextChangeListener) {
+        this.onTextChangeListener = onTextChangeListener;
     }
 
-    public interface OnPasswordChangeListener {
-        void onPasswordChange(String password);
+    public interface OnTextChangeListener {
+        /**
+         * 监听输入变化
+         *
+         * @param text       当前的文案
+         * @param isComplete 是不是完成输入
+         */
+        void onTextChange(String text, boolean isComplete);
     }
 
 }

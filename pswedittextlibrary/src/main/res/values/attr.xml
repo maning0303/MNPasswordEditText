@@ -2,7 +2,6 @@
 <resources>
 
     <declare-styleable name="MNPasswordEditText">
-
         <!--密码框的颜色-->
         <attr name="mnPsw_border_color" format="color" />
         <!--密码框选中的颜色-->

@@ -3,6 +3,7 @@ package com.maning.mnpasswordedittext;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.maning.pswedittextlibrary.MNPasswordEditText;
 
@@ -18,10 +19,13 @@ public class MainActivity extends AppCompatActivity {
 
         tvShow = (TextView) findViewById(R.id.tvShow);
         mPswEditText = (MNPasswordEditText) findViewById(R.id.mPswEditText);
-        mPswEditText.setOnPasswordChangeListener(new MNPasswordEditText.OnPasswordChangeListener() {
+        mPswEditText.setOnTextChangeListener(new MNPasswordEditText.OnTextChangeListener() {
             @Override
-            public void onPasswordChange(String password) {
-                tvShow.setText(password);
+            public void onTextChange(String text, boolean isComplete) {
+                tvShow.setText(text);
+                if (isComplete) {
+                    Toast.makeText(MainActivity.this, "输入完成", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
