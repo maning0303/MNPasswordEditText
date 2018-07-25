@@ -1,5 +1,6 @@
 # MNPasswordEditText [![](https://jitpack.io/v/maning0303/MNPasswordEditText.svg)](https://jitpack.io/#maning0303/MNPasswordEditText)
-类似微信支付宝的密码输入框
+Android验证码和密码输入框，能自定义输入框个数和样式（连体，下划线和方形框）
+类似微信支付宝的密码输入框等
 
 
 ## 截图：
@@ -22,7 +23,7 @@
 #### 2.在app目录下的build.gradle中添加依赖
 ``` gradle
 	dependencies {
-	     compile 'com.github.maning0303:MNPasswordEditText:V1.0.1'
+	     compile 'com.github.maning0303:MNPasswordEditText:V1.0.2'
 	}
 ```
 
@@ -40,54 +41,57 @@
 ### 1:自定义参数介绍:
 ``` java
 
-    <declare-styleable name="MNPasswordEditText">
-
-        <!--密码框的颜色-->
-        <attr name="mnPsw_border_color" format="color"/>
-        <!--密码文字的颜色,圆形密码颜色-->
-        <attr name="mnPsw_text_color" format="color"/>
-        <!--密码框的圆角-->
-        <attr name="mnPsw_border_radius" format="dimension"/>
-        <!--密码框的线的大小-->
-        <attr name="mnPsw_border_width" format="dimension"/>
-        <!--密码框的每个间隔,只有样式2才起作用-->
-        <attr name="mnPsw_item_margin" format="dimension"/>
-        <!--密码框背景色-->
-        <attr name="mnPsw_background_color" format="color"/>
-        <!--密码框输入的模式:4.明文,3.文字,2.图片,1.圆形-->
-        <attr name="mnPsw_mode" format="enum">
-            <!--圆形默认-->
-            <enum name="Circle" value="1"/>
-            <!--图片-->
-            <enum name="Bitmap" value="2"/>
-            <!--文本-->
-            <enum name="Text" value="3"/>
-            <!--原始-->
-            <enum name="OriginalText" value="4"/>
-        </attr>
-        <!--密码框样式: 1.连在一起 2.分开单独显示-->
-        <attr name="mnPsw_style" format="enum">
-            <!--连在一起-->
-            <enum name="StyleDefault" value="1"/>
-            <!--单独-->
-            <enum name="StyleOneself" value="2"/>
-        </attr>
-        <!--密码文字遮盖-->
-        <attr name="mnPsw_cover_text" format="string"/>
-        <!--密码图片遮盖-->
-        <attr name="mnPsw_cover_bitmap_id" format="reference"/>
-        <!--密码圆形遮盖颜色-->
-        <attr name="mnPsw_cover_circle_color" format="color"/>
-        <!--密码圆形遮盖半径-->
-        <attr name="mnPsw_cover_circle_radius" format="dimension"/>
-        <!--密码图片遮盖长宽-->
-        <attr name="mnPsw_cover_bitmap_width" format="dimension"/>
-
-    </declare-styleable>
+   <declare-styleable name="MNPasswordEditText">
+           <!--密码框的颜色-->
+           <attr name="mnPsw_border_color" format="color" />
+           <!--密码框选中的颜色-->
+           <attr name="mnPsw_border_selected_color" format="color" />
+           <!--密码文字的颜色,圆形密码颜色-->
+           <attr name="mnPsw_text_color" format="color" />
+           <!--密码框的圆角-->
+           <attr name="mnPsw_border_radius" format="dimension" />
+           <!--密码框的线的大小-->
+           <attr name="mnPsw_border_width" format="dimension" />
+           <!--密码框的每个间隔,只有样式2才起作用-->
+           <attr name="mnPsw_item_margin" format="dimension" />
+           <!--密码框背景色-->
+           <attr name="mnPsw_background_color" format="color" />
+           <!--密码框输入的模式:4.明文,3.文字,2.图片,1.圆形-->
+           <attr name="mnPsw_mode" format="enum">
+               <!--圆形默认-->
+               <enum name="Circle" value="1" />
+               <!--图片-->
+               <enum name="Bitmap" value="2" />
+               <!--文本-->
+               <enum name="Text" value="3" />
+               <!--原始-->
+               <enum name="OriginalText" value="4" />
+           </attr>
+           <!--密码框样式: 1.连在一起 2.分开单独显示  3.下划线形式-->
+           <attr name="mnPsw_style" format="enum">
+               <!--连在一起-->
+               <enum name="StyleDefault" value="1" />
+               <!--单独-->
+               <enum name="StyleOneself" value="2" />
+               <!--下划线形式-->
+               <enum name="StyleUnderLine" value="3" />
+           </attr>
+           <!--密码文字遮盖-->
+           <attr name="mnPsw_cover_text" format="string" />
+           <!--密码图片遮盖-->
+           <attr name="mnPsw_cover_bitmap_id" format="reference" />
+           <!--密码圆形遮盖颜色-->
+           <attr name="mnPsw_cover_circle_color" format="color" />
+           <!--密码圆形遮盖半径-->
+           <attr name="mnPsw_cover_circle_radius" format="dimension" />
+           <!--密码图片遮盖长宽-->
+           <attr name="mnPsw_cover_bitmap_width" format="dimension" />
+   
+   </declare-styleable>
 
 ```
 
-### 2:布局文件使用:
+### 2:布局文件使用（详细查看Demo）:
 ``` java
 
     <com.maning.pswedittextlibrary.MNPasswordEditText
@@ -116,11 +120,14 @@
 ``` java
 
     mPswEditText = (MNPasswordEditText) findViewById(R.id.mPswEditText);
-    //监听密码输入
-    mPswEditText.setOnPasswordChangeListener(new MNPasswordEditText.OnPasswordChangeListener() {
+    //监听输入的过程
+    mPswEditText.setOnTextChangeListener(new MNPasswordEditText.OnTextChangeListener() {
         @Override
-        public void onPasswordChange(String password) {
-            tvShow.setText(password);
+        public void onTextChange(String text, boolean isComplete) {
+            tvShow.setText(text);
+            if (isComplete) {
+                Toast.makeText(MainActivity.this, "输入完成", Toast.LENGTH_SHORT).show();
+            }
         }
     });
 
