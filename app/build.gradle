@@ -26,7 +26,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.2.0'
 
     //测试Gradle
-//    compile 'com.github.maning0303:MNPasswordEditText:V1.0.0'
+//    compile 'com.github.maning0303:MNPasswordEditText:V1.0.2'
 
     compile project(':pswedittextlibrary')
 }
