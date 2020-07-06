@@ -1,12 +1,11 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion "27.0.3"
+    compileSdkVersion 28
     defaultConfig {
         applicationId "com.maning.mnpasswordedittext"
         minSdkVersion 14
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
     }
@@ -20,10 +19,9 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:27.1.0'
-
+    implementation 'com.android.support:appcompat-v7:28.0.0'
     //测试Gradle
-//    compile 'com.github.maning0303:MNPasswordEditText:V1.0.2'
+//    implementation 'com.github.maning0303:MNPasswordEditText:V1.0.3'
 
     implementation project(':pswedittextlibrary')
 }
