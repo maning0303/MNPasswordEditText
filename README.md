@@ -4,7 +4,7 @@ Android验证码和密码输入框，能自定义输入框个数和样式（连�
 
 
 ## 截图：
-![](https://github.com/maning0303/MNPasswordEditText/raw/master/screenshots/mn_pswedittext_001.png)
+![](https://github.com/maning0303/MNPasswordEditText/raw/master/screenshots/mn_pswedittext_001.jpeg)
 
 
 ## 如何添加
@@ -23,7 +23,7 @@ Android验证码和密码输入框，能自定义输入框个数和样式（连�
 #### 2.在app目录下的build.gradle中添加依赖
 ``` gradle
 	dependencies {
-	     compile 'com.github.maning0303:MNPasswordEditText:V1.0.2'
+	     implementation 'com.github.maning0303:MNPasswordEditText:V1.0.3'
 	}
 ```
 
