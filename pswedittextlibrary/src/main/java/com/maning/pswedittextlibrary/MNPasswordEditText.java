@@ -212,6 +212,9 @@ public class MNPasswordEditText extends EditText {
         //获取宽高
         int measuredWidth = getMeasuredWidth();
         float itemH = getMeasuredHeight();
+        //方形框
+        float margin = itemMargin;
+        float itemW = (measuredWidth - margin * (maxLength - 1)) / maxLength;
 
         //判断类型
         if (editTextStyle == 1) {
@@ -226,7 +229,8 @@ public class MNPasswordEditText extends EditText {
                 //Android系统小于API16，使用setBackgroundDrawable
                 setBackgroundDrawable(gradientDrawable);
             }
-            float itemW = measuredWidth / maxLength;
+            margin = 0;
+            itemW = measuredWidth / maxLength;
             //画线
             for (int i = 1; i < maxLength; i++) {
                 float startX = itemW * i;
@@ -236,9 +240,6 @@ public class MNPasswordEditText extends EditText {
                 canvas.drawLine(startX, startY, stopX, stopY, mPaintLine);
             }
         } else if (editTextStyle == 2) {
-            //方形框
-            float margin = itemMargin;
-            float itemW = measuredWidth / maxLength - margin;
             gradientDrawable.setStroke((int) borderWidth, borderColor);
             gradientDrawable.setCornerRadius(borderRadius);
             gradientDrawable.setColor(backgroundColor);
@@ -250,7 +251,7 @@ public class MNPasswordEditText extends EditText {
             }
             //画每个Item背景
             for (int i = 0; i < maxLength; i++) {
-                float left = itemW * i + margin / 2 + margin * i;
+                float left = itemW * i + margin * i;
                 float top = 0;
                 if (bitmapSelected == null) {
                     canvas.drawBitmap(bitmap, left, top, mPaintLine);
@@ -264,7 +265,6 @@ public class MNPasswordEditText extends EditText {
                 }
             }
         } else if (editTextStyle == 3) {
-            float itemW = (measuredWidth - itemMargin * (maxLength - 1) - itemMargin) / maxLength;
             //下划线格式
             for (int i = 0; i < maxLength; i++) {
                 if (borderSelectedColor != 0) {
@@ -277,7 +277,7 @@ public class MNPasswordEditText extends EditText {
                 } else {
                     mPaintLine.setColor(borderColor);
                 }
-                float startX = itemW * i + itemMargin * i + itemMargin / 2;
+                float startX = itemW * i + itemMargin * i;
                 float startY = itemH - borderWidth;
                 float stopX = startX + itemW;
                 float stopY = startY;
@@ -289,39 +289,42 @@ public class MNPasswordEditText extends EditText {
         String currentText = getText().toString();
         for (int i = 0; i < maxLength; i++) {
             if (!TextUtils.isEmpty(currentText) && i < currentText.length()) {
-                //<!--密码框输入的模式:4.明文,3.文字,2.图片,1.圆形-->
+                //<!--密码框输入的模式:1.圆形，2.图片，3.文字，4.明文-->
                 if (inputMode == 1) {
                     //圆点半径
-                    float circleRadius = measuredWidth / maxLength * 0.5f * 0.3f;
+                    float circleRadius = itemW * 0.5f * 0.5f;
+                    if (circleRadius > itemH / 2f) {
+                        circleRadius = itemH * 0.5f * 0.5f;
+                    }
                     if (coverCirclrRadius > 0) {
                         circleRadius = coverCirclrRadius;
                     }
-                    float startX = (measuredWidth / maxLength) / 2.0f + measuredWidth / maxLength * i;
+                    float startX = (itemW / 2f) + itemW * i + margin * i;
                     float startY = (itemH) / 2.0f;
                     mPaintText.setColor(coverCirclrColor);
                     canvas.drawCircle(startX, startY, circleRadius, mPaintText);
                 } else if (inputMode == 2) {
-                    float picW = measuredWidth / maxLength * 0.5f;
+                    float picW = itemW * 0.5f;
                     if (coverBitmapWidth > 0) {
                         picW = coverBitmapWidth;
                     }
-                    float startX = (measuredWidth / maxLength - picW) / 2.0f + measuredWidth / maxLength * i;
-                    float startY = (itemH - picW) / 2.0f;
+                    float startX = (itemW - picW) / 2f + itemW * i + margin * i;
+                    float startY = (itemH - picW) / 2f;
                     Bitmap bitmap = Bitmap.createScaledBitmap(coverBitmap, (int) picW, (int) picW, true);
                     canvas.drawBitmap(bitmap, startX, startY, mPaintText);
                 } else if (inputMode == 3) {
                     float fontWidth = getFontWidth(mPaintText, coverText);
                     float fontHeight = getFontHeight(mPaintText, coverText);
-                    float startX = (measuredWidth / maxLength - fontWidth) / 2.0f + measuredWidth / maxLength * i;
-                    float startY = (itemH + fontHeight) / 2.0f - 6;
+                    float startX = (itemW - fontWidth) / 2f + itemW * i + margin * i;
+                    float startY = (itemH + fontHeight) / 2f - 6;
                     mPaintText.setColor(textColor);
                     canvas.drawText(coverText, startX, startY, mPaintText);
                 } else {
                     String StrPosition = String.valueOf(currentText.charAt(i));
                     float fontWidth = getFontWidth(mPaintText, StrPosition);
                     float fontHeight = getFontHeight(mPaintText, StrPosition);
-                    float startX = (measuredWidth / maxLength - fontWidth) / 2.0f + measuredWidth / maxLength * i;
-                    float startY = (itemH + fontHeight) / 2.0f;
+                    float startX = (itemW - fontWidth) / 2f + itemW * i + margin * i;
+                    float startY = (itemH + fontHeight) / 2f;
                     mPaintText.setColor(textColor);
                     canvas.drawText(StrPosition, startX, startY, mPaintText);
                 }
