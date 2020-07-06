@@ -32,7 +32,7 @@ Android验证码和密码输入框，能自定义输入框个数和样式（连�
 
 ``` gradle
 
-	compile project(':pswedittextlibrary')
+	implementation project(':pswedittextlibrary')
 
 ```
 
