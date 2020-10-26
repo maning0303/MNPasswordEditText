@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/MNPasswordEditText.iml" filepath="$PROJECT_DIR$/MNPasswordEditText.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/pswedittextlibrary/pswedittextlibrary.iml" filepath="$PROJECT_DIR$/pswedittextlibrary/pswedittextlibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MNPasswordEditText.iml" filepath="$PROJECT_DIR$/MNPasswordEditText.iml" group="MNPasswordEditText" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="MNPasswordEditText/app" />
+      <module fileurl="file://$PROJECT_DIR$/pswedittextlibrary/pswedittextlibrary.iml" filepath="$PROJECT_DIR$/pswedittextlibrary/pswedittextlibrary.iml" group="MNPasswordEditText/pswedittextlibrary" />
     </modules>
   </component>
 </project>
