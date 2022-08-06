@@ -24,7 +24,7 @@ dependencies {
     implementation 'androidx.annotation:annotation:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     //测试Gradle
-//    implementation 'com.github.maning0303:MNPasswordEditText:V1.0.3'
+//    implementation 'com.github.maning0303:MNPasswordEditText:V1.0.4'
 
     implementation project(':pswedittextlibrary')
 }

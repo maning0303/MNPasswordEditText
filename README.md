@@ -24,7 +24,7 @@ Android验证码和密码输入框，能自定义输入框个数和样式（连�
 #### 2.在app目录下的build.gradle中添加依赖
 ``` gradle
 	dependencies {
-	     implementation 'com.github.maning0303:MNPasswordEditText:V1.0.3'
+	     implementation 'com.github.maning0303:MNPasswordEditText:V1.0.4'
 	}
 ```
 
