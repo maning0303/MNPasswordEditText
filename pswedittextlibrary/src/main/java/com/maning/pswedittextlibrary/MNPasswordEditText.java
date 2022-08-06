@@ -366,9 +366,6 @@ public class MNPasswordEditText extends EditText {
             if (cursorHeight == 0 || cursorHeight > itemH) {
                 cursorHeight = itemH * 50 / 100;
             }
-            if(cursorWidth == 0){
-
-            }
             Bitmap bitmap = drawableToBitmap(cursorDrawable, (int) cursorWidth, (int) cursorHeight);
             float cursorLeft = (itemW + margin) * currentIndex + itemW / 2 - cursorWidth / 2;
             float cursorTop = (itemH - cursorHeight) / 2;
