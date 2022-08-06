@@ -29,6 +29,7 @@ public class MNPasswordEditText extends EditText {
     private static final String TAG = "MNPasswordEditText";
 
     private Context mContext;
+    private String defaultColor = "#FF0000";
     /**
      * 长度
      */
@@ -103,6 +104,20 @@ public class MNPasswordEditText extends EditText {
     private GradientDrawable gradientDrawable = new GradientDrawable();
     private Bitmap coverBitmap;
 
+    private Paint mPaintCursor;
+
+    /**
+     * 光标
+     */
+    private GradientDrawable cursorDrawable = new GradientDrawable();
+    private int cursorColor;
+    private float cursorWidth;
+    private float cursorHeight;
+    private float cursorCornerRadius;
+    private boolean showCursor = false;
+    private boolean mCursorFlag;
+    private Blink mBlink;
+
 
     public MNPasswordEditText(Context context) {
         this(context, null);
@@ -127,36 +142,43 @@ public class MNPasswordEditText extends EditText {
         TypedArray array = mContext.obtainStyledAttributes(attrs, R.styleable.MNPasswordEditText, defStyleAttr, 0);
 
         //背景色
-        backgroundColor = array.getColor(R.styleable.MNPasswordEditText_mnPsw_background_color, Color.parseColor("#FFFFFF"));
+        backgroundColor = array.getColor(R.styleable.MNPasswordEditText_psw_background_color, Color.parseColor("#FFFFFF"));
         //边框颜色
-        borderColor = array.getColor(R.styleable.MNPasswordEditText_mnPsw_border_color, Color.parseColor("#FF0000"));
+        borderColor = array.getColor(R.styleable.MNPasswordEditText_psw_border_color, Color.parseColor(defaultColor));
         //边框选中的颜色
-        borderSelectedColor = array.getColor(R.styleable.MNPasswordEditText_mnPsw_border_selected_color, 0);
+        borderSelectedColor = array.getColor(R.styleable.MNPasswordEditText_psw_border_selected_color, Color.parseColor(defaultColor));
         //文字的颜色
-        textColor = array.getColor(R.styleable.MNPasswordEditText_mnPsw_text_color, Color.parseColor("#FF0000"));
+        textColor = array.getColor(R.styleable.MNPasswordEditText_psw_text_color, Color.parseColor(defaultColor));
         //边框圆角
-        borderRadius = array.getDimension(R.styleable.MNPasswordEditText_mnPsw_border_radius, dip2px(6));
+        borderRadius = array.getDimension(R.styleable.MNPasswordEditText_psw_border_radius, dip2px(6));
         //边框线大小
-        borderWidth = array.getDimension(R.styleable.MNPasswordEditText_mnPsw_border_width, dip2px(1));
+        borderWidth = array.getDimension(R.styleable.MNPasswordEditText_psw_border_width, dip2px(1));
         //每个密码框的间隔
-        itemMargin = array.getDimension(R.styleable.MNPasswordEditText_mnPsw_item_margin, dip2px(10));
+        itemMargin = array.getDimension(R.styleable.MNPasswordEditText_psw_item_margin, dip2px(10));
         //输入的模式
-        inputMode = array.getInt(R.styleable.MNPasswordEditText_mnPsw_mode, 1);
+        inputMode = array.getInt(R.styleable.MNPasswordEditText_psw_mode, 1);
         //整体样式
-        editTextStyle = array.getInt(R.styleable.MNPasswordEditText_mnPsw_style, 1);
+        editTextStyle = array.getInt(R.styleable.MNPasswordEditText_psw_style, 1);
         //替换的图片
-        coverBitmapID = array.getResourceId(R.styleable.MNPasswordEditText_mnPsw_cover_bitmap_id, -1);
+        coverBitmapID = array.getResourceId(R.styleable.MNPasswordEditText_psw_cover_bitmap_id, -1);
         //替换的文字
-        coverText = array.getString(R.styleable.MNPasswordEditText_mnPsw_cover_text);
+        coverText = array.getString(R.styleable.MNPasswordEditText_psw_cover_text);
         if (TextUtils.isEmpty(coverText)) {
             coverText = "密";
         }
         //圆形的颜色
-        coverCirclrColor = array.getColor(R.styleable.MNPasswordEditText_mnPsw_cover_circle_color, Color.parseColor("#FF0000"));
+        coverCirclrColor = array.getColor(R.styleable.MNPasswordEditText_psw_cover_circle_color, Color.parseColor(defaultColor));
         //密码圆形遮盖半径
-        coverCirclrRadius = array.getDimension(R.styleable.MNPasswordEditText_mnPsw_cover_circle_radius, 0);
+        coverCirclrRadius = array.getDimension(R.styleable.MNPasswordEditText_psw_cover_circle_radius, 0);
         //密码图片遮盖长宽
-        coverBitmapWidth = array.getDimension(R.styleable.MNPasswordEditText_mnPsw_cover_bitmap_width, 0);
+        coverBitmapWidth = array.getDimension(R.styleable.MNPasswordEditText_psw_cover_bitmap_width, 0);
+
+        //--------------光标属性-----
+        showCursor = array.getBoolean(R.styleable.MNPasswordEditText_psw_show_cursor, false);
+        cursorColor = array.getColor(R.styleable.MNPasswordEditText_psw_cursor_color, borderSelectedColor);
+        cursorHeight = array.getDimension(R.styleable.MNPasswordEditText_psw_cursor_height, 0);
+        cursorWidth = array.getDimension(R.styleable.MNPasswordEditText_psw_cursor_width, 6);
+        cursorCornerRadius = array.getDimension(R.styleable.MNPasswordEditText_psw_cursor_corner_radius, 0);
 
         //回收
         array.recycle();
@@ -192,6 +214,13 @@ public class MNPasswordEditText extends EditText {
         mPaintLine.setColor(borderColor);
         mPaintLine.setStrokeWidth(borderWidth);
 
+        //光标
+        cursorDrawable.setCornerRadius(cursorCornerRadius);
+        cursorDrawable.setColor(cursorColor);
+        mPaintCursor = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaintCursor.setStyle(Paint.Style.FILL);
+        mPaintCursor.setColor(cursorColor);
+
         //遮盖是图片方式，提前加载图片
         if (inputMode == 2) {
             //判断有没有图片
@@ -215,6 +244,8 @@ public class MNPasswordEditText extends EditText {
         //方形框
         float margin = itemMargin;
         float itemW = (measuredWidth - margin * (maxLength - 1)) / maxLength;
+
+        int currentIndex = getText().length();
 
         //判断类型
         if (editTextStyle == 1) {
@@ -256,7 +287,7 @@ public class MNPasswordEditText extends EditText {
                 if (bitmapSelected == null) {
                     canvas.drawBitmap(bitmap, left, top, mPaintLine);
                 } else {
-                    if (getText().length() == i) {
+                    if (currentIndex == i) {
                         //选中是另外的颜色
                         canvas.drawBitmap(bitmapSelected, left, top, mPaintLine);
                     } else {
@@ -268,7 +299,7 @@ public class MNPasswordEditText extends EditText {
             //下划线格式
             for (int i = 0; i < maxLength; i++) {
                 if (borderSelectedColor != 0) {
-                    if (getText().length() == i) {
+                    if (currentIndex == i) {
                         //选中是另外的颜色
                         mPaintLine.setColor(borderSelectedColor);
                     } else {
@@ -331,8 +362,114 @@ public class MNPasswordEditText extends EditText {
             }
         }
 
+        if (showCursor && mCursorFlag) {
+            if (cursorHeight == 0 || cursorHeight > itemH) {
+                cursorHeight = itemH * 50 / 100;
+            }
+            if(cursorWidth == 0){
+
+            }
+            Bitmap bitmap = drawableToBitmap(cursorDrawable, (int) cursorWidth, (int) cursorHeight);
+            float cursorLeft = (itemW + margin) * currentIndex + itemW / 2 - cursorWidth / 2;
+            float cursorTop = (itemH - cursorHeight) / 2;
+            canvas.drawBitmap(bitmap, cursorLeft, cursorTop, mPaintCursor);
+        }
 
     }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        resumeBlink();
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        suspendBlink();
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasWindowFocus) {
+        super.onWindowFocusChanged(hasWindowFocus);
+        if (hasWindowFocus) {
+            if (mBlink != null) {
+                mBlink.uncancel();
+            }
+            makeBlink();
+        } else {
+            if (mBlink != null) {
+                mBlink.cancel();
+            }
+        }
+    }
+
+    @Override
+    protected void onFocusChanged(boolean focused, int direction, Rect previouslyFocusedRect) {
+        super.onFocusChanged(focused, direction, previouslyFocusedRect);
+        if (focused) {
+            if (mBlink != null) {
+                mBlink.uncancel();
+            }
+            makeBlink();
+        } else {
+            if (mBlink != null) {
+                mBlink.cancel();
+            }
+        }
+    }
+
+    private void resumeBlink() {
+        if (mBlink != null) {
+            mBlink.uncancel();
+        }
+        makeBlink();
+    }
+
+    private void suspendBlink() {
+        if (mBlink != null) {
+            mBlink.cancel();
+        }
+    }
+
+    private void makeBlink() {
+        if (true) {
+            if (mBlink == null) mBlink = new Blink();
+            removeCallbacks(mBlink);
+            postDelayed(mBlink, 500);
+        } else {
+            if (mBlink != null) removeCallbacks(mBlink);
+        }
+    }
+
+
+    private class Blink implements Runnable {
+
+        private boolean mCancelled = false;
+
+        @Override
+        public void run() {
+            mCursorFlag = !mCursorFlag;
+            invalidate();
+            if (mCancelled) {
+                return;
+            }
+            //每个500毫秒刷新一次
+            postDelayed(this, 500);
+        }
+
+        public void cancel() {
+            if (!mCancelled) {
+                removeCallbacks(this);
+                mCancelled = true;
+            }
+        }
+
+        public void uncancel() {
+            mCancelled = false;
+        }
+    }
+
 
     public static Bitmap drawableToBitmap(Drawable drawable, int width, int height) {
         Bitmap bitmap = Bitmap.createBitmap(

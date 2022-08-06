@@ -3,21 +3,21 @@
 
     <declare-styleable name="MNPasswordEditText">
         <!--密码框的颜色-->
-        <attr name="mnPsw_border_color" format="color" />
+        <attr name="psw_border_color" format="color" />
         <!--密码框选中的颜色-->
-        <attr name="mnPsw_border_selected_color" format="color" />
+        <attr name="psw_border_selected_color" format="color" />
         <!--密码文字的颜色,圆形密码颜色-->
-        <attr name="mnPsw_text_color" format="color" />
+        <attr name="psw_text_color" format="color" />
         <!--密码框的圆角-->
-        <attr name="mnPsw_border_radius" format="dimension" />
+        <attr name="psw_border_radius" format="dimension" />
         <!--密码框的线的大小-->
-        <attr name="mnPsw_border_width" format="dimension" />
+        <attr name="psw_border_width" format="dimension" />
         <!--密码框的每个间隔,只有样式2才起作用-->
-        <attr name="mnPsw_item_margin" format="dimension" />
+        <attr name="psw_item_margin" format="dimension" />
         <!--密码框背景色-->
-        <attr name="mnPsw_background_color" format="color" />
+        <attr name="psw_background_color" format="color" />
         <!--密码框输入的模式:4.明文,3.文字,2.图片,1.圆形-->
-        <attr name="mnPsw_mode" format="enum">
+        <attr name="psw_mode" format="enum">
             <!--圆形默认-->
             <enum name="Circle" value="1" />
             <!--图片-->
@@ -28,7 +28,7 @@
             <enum name="OriginalText" value="4" />
         </attr>
         <!--密码框样式: 1.连在一起 2.分开单独显示  3.下划线形式-->
-        <attr name="mnPsw_style" format="enum">
+        <attr name="psw_style" format="enum">
             <!--连在一起-->
             <enum name="StyleDefault" value="1" />
             <!--单独-->
@@ -37,15 +37,25 @@
             <enum name="StyleUnderLine" value="3" />
         </attr>
         <!--密码文字遮盖-->
-        <attr name="mnPsw_cover_text" format="string" />
+        <attr name="psw_cover_text" format="string" />
         <!--密码图片遮盖-->
-        <attr name="mnPsw_cover_bitmap_id" format="reference" />
+        <attr name="psw_cover_bitmap_id" format="reference" />
         <!--密码圆形遮盖颜色-->
-        <attr name="mnPsw_cover_circle_color" format="color" />
+        <attr name="psw_cover_circle_color" format="color" />
         <!--密码圆形遮盖半径-->
-        <attr name="mnPsw_cover_circle_radius" format="dimension" />
+        <attr name="psw_cover_circle_radius" format="dimension" />
         <!--密码图片遮盖长宽-->
-        <attr name="mnPsw_cover_bitmap_width" format="dimension" />
+        <attr name="psw_cover_bitmap_width" format="dimension" />
+        <!--是否显示光标-->
+        <attr name="psw_show_cursor" format="boolean" />
+        <!--光标颜色-->
+        <attr name="psw_cursor_color" format="color" />
+        <!--光标高度-->
+        <attr name="psw_cursor_height" format="dimension" />
+        <!--光标宽度-->
+        <attr name="psw_cursor_width" format="dimension" />
+        <!--光标圆角-->
+        <attr name="psw_cursor_corner_radius" format="dimension" />
 
     </declare-styleable>
 

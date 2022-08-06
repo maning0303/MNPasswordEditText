@@ -4,7 +4,7 @@ apply plugin: 'com.github.dcendents.android-maven'
 group='com.github.maning0303'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
 
     defaultConfig {
         minSdkVersion 14
@@ -23,4 +23,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    compileOnly 'androidx.legacy:legacy-support-v4:1.0.0'
+    compileOnly 'androidx.annotation:annotation:1.2.0'
 }
